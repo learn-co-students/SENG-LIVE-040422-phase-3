@@ -3,3 +3,10 @@
 require_relative "../config/environment"
 
 start_cli
+print_menu_options
+choice = ask_for_choice
+while choice != "exit" do
+  handle_choice(choice)
+  print_menu_options
+  choice = ask_for_choice
+end

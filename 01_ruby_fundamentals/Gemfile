@@ -8,3 +8,5 @@ group :development do
 end
 
 
+
+gem "colorize", "~> 0.8.1"
