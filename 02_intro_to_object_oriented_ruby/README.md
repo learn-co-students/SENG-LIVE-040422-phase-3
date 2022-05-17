@@ -73,9 +73,9 @@ dog.print
   - add a `print` method which will handle printing the dog information to the standard output
 - In CLI
   - Add menu options for walking and feeding dogs
-  - After choosing those options, create logic to allow users to choose which dog they want to walk/feed
+  - After choosing those options, use logic to allow users to choose which dog they want to walk/feed
   - refactor the parts of the cli that were expecting a dog hash to work with a dog instance instead.
-    - `DOGS` should store an array of instances of the Dog class instead of an array of hashes
+    - `$dogs` should store an array of instances of the Dog class instead of an array of hashes
     - within the `add_dog` method, we'll create an instance of the `Dog` class instead of a hash
     - instead of calling print_dog and passing the dog hash, we'll invoke `print` directly on the dog
 
@@ -91,10 +91,10 @@ dog.print
 
 ### New dependencies
 
-For today, we're going to be working with `DateTime` objects to determine whether a dog needs a walk or a meal. There is a library that adds a bunch of useful methods for working with dates, so we're going to add it as a dependency. The gem is called `activesupport` (a part of the Ruby on Rails gem) and we can add it with the following command:
+For today, we're going to be working with `Time` objects to determine whether a dog needs a walk or a meal. There is a library that adds a bunch of useful methods for working with dates, so we're going to add it as a dependency. The gem is called `activesupport` (a part of the Ruby on Rails gem) and we can add it with the following command:
 
 ```bash
-bundle add activesupport
+bundle add activesupport -v '~> 6.1'
 ```
 This will update the Gemfile in the following way.
 ```ruby
@@ -103,7 +103,7 @@ This will update the Gemfile in the following way.
 
 gem "activesupport", "~> 6.1"
 ```
-Next, because `activesupport` is built in a more modular way, the `Bundler.require(:default)` isn't enough to get what we need, so we're going to require the pieces we want to work with within the `config/environment.rb` file.
+Next, Because we'll now be working with dates, we're going to add a few require statements to the `config/environment.rb` file to pull in the code we'll need:
 ```rb
 # config/environment.rb
 # ...
@@ -118,16 +118,18 @@ The integer extension allows us to convert integers into duration objects and do
 [1] pry(main)> 1.hours
 => 1 hour
 [2] pry(main)> 1.hour.ago
-=> 2021-08-30 14:00:18 -0700
-[3] pry(main)> DateTime.now < 1.hour.ago
+=> 2022-05-17 09:00:11.068063 -0700
+[3] pry(main)> Time.now < 1.hour.ago
 => false
-[4] pry(main)> DateTime.now > 1.hour.ago
+[4] pry(main)> Time.now > 1.hour.ago
+=> true
+[5] pry(main)> 1.hour.ago.between?(2.hours.ago, Time.now)
 => true
 ```
 
 This allows us to:
 - compare times with reference to the current time
-- If one time is greater than another, that means that the greater time is later than the lesser time.
+- use the `between?` method on a time to check if one time is between two other times (a beginning and ending time passed as arguments in that order).
 - We can also take a time and add a duration to it to get another time after it
 - Or we can take a time and subtract a duration from it and get another time before it
 
