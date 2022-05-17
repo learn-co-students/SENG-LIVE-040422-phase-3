@@ -9,6 +9,11 @@ require "require_all"
 # add the ability to print colored strings
 require "colorize"
 
+# add dependencies for working with Dates & Times
+require "date"
+require "active_support/core_ext/integer/time"
+require "active_support/core_ext/date/calculations"
+
 # When we use `require_all`, the path we pass to it will be 
 # relative to the root path of the project (where the Gemfile 
 # is). In our case, we're loading all of the files inside of 

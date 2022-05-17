@@ -2,11 +2,13 @@ def start_cli
   puts "Hi there! Welcome to the Dog Walker CLI!".cyan
 end
 
-# ✅ add 2 additional options for walking and feeding dogs
+# ✅✅ add 2 additional options for walking and feeding dogs
 def print_menu_options
   puts "Here are the choices:"
   puts "  1. List all dogs"
   puts "  2. Add a dog"
+  puts "  3. To walk a dog"
+  puts "  4. To feed a dog"
   puts "Please choose the number matching your choice."
   puts 'At any time, type "exit" to leave the program'
 end
@@ -28,23 +30,14 @@ end
 
 
 
-# ✅ remove the print_dog method. We'll be using the Dog#print method instead
-
-def print_dog(dog_hash)
-  puts
-  puts dog_hash[:name].green
-  puts "  Age: #{dog_hash[:age]}"
-  puts "  Breed: #{dog_hash[:breed]}"
-  puts "  Image Url: #{dog_hash[:image_url]}"
-  puts
-end
+# ✅✅ remove the print_dog method. We'll be using the Dog#print method instead
 
 
 # define a method `list_dogs` that will iterate over an array of
-# dog hashes and call print_dog on each one.
+# ✅ dog instances and call print on each one.
 def list_dogs(dogs)
-  dogs.each do |dog_hash|
-    print_dog(dog_hash)
+  dogs.each do |dog|
+    dog.print
   end
 end
 
@@ -68,14 +61,17 @@ def add_dog(dogs)
   print "What's the dog's image url? "
   image_url = ask_for_choice
   # ✅ Rework the code below to use the Dog class
-  dog_hash = {
-    name: name,
-    age: age,
-    breed: breed,
-    image_url: image_url
-  }
-  dogs << dog_hash
-  print_dog(dog_hash)
+  # dog_hash = {
+  #   name: name,
+  #   age: age,
+  #   breed: breed,
+  #   image_url: image_url
+  # }
+  # dogs << dog_hash
+  # print_dog(dog_hash)
+  dog = Dog.new(name, age, breed, image_url)
+  dogs << dog
+  dog.print
 end
 
 
@@ -86,6 +82,10 @@ def handle_choice(choice)
     list_dogs($dogs)
   elsif choice == "2"
     add_dog($dogs)
+  elsif choice == "3"
+    walk_dog($dogs)
+  elsif choice == "4"
+    feed_dog($dogs)
   elsif choice == "debug"
     binding.pry
   else
@@ -107,6 +107,7 @@ end
 def choose_dog_from_collection(dogs)
   dogs.each_with_index do |dog, index|
     # ✅ print out a number using each dog's index and its name (breed)
+    puts "#{index+1}. #{dog.name} (#{dog.breed})"
   end
   puts "Type the number associated with the dog you'd like to choose"
   # this code converts the number typed by the user and stored as a string
@@ -132,10 +133,19 @@ end
 # which dog to walk. After choosing a dog, invoke the `walk` method
 # on the dog and then `print` it
 
-
+def walk_dog(dogs)
+  dog = choose_dog_from_collection(dogs)
+  dog.walk
+  dog.print
+end
 
 
 
 # ✅ Add a `feed_dog` method that will prompt the user to choose
 # which dog to feed. After choosing a dog, invoke the `feed` method
 # on the dog and then `print` it
+def feed_dog(dogs)
+  dog = choose_dog_from_collection(dogs)
+  dog.feed
+  dog.print
+end
