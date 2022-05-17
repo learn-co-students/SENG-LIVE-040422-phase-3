@@ -88,6 +88,12 @@ dog.print
 ```bash
 ./bin/run
 ```
+- If we want to play around with our code without starting the CLI, we can run the following command in our terminal:
+
+```bash
+./bin/console
+```
+
 
 ### New dependencies
 
