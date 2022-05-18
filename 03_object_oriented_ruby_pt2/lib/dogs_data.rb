@@ -116,10 +116,7 @@ $dogs = [
     image_url: "https://res.cloudinary.com/dnocv6uwb/image/upload/v1629822337/sn-color_qesmhx.jpg"
   }
 ].map do |dog_hash|
-  Dog.new(
-    dog_hash[:name],
-    dog_hash[:age],
-    dog_hash[:breed],
-    dog_hash[:image_url]
+  Dog.create(
+    dog_hash
   )
 end

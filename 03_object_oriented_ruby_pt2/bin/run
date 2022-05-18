@@ -2,7 +2,6 @@
 
 require_relative "../config/environment"
 
-# ✅ use the $dogs global variable to create new dog instances so that we have some dogs to work with inside the CLI.
 
 start_cli
 print_menu_options

@@ -50,7 +50,7 @@ end
 # Take this information and use it to create a new instance
 # of the dog class (using the method that causes the dog class to save it)
 # print the newly saved dog (by invoking dog.print)
-def add_dog(dogs)
+def add_dog
   print "What's the dog's name? "
   name = ask_for_choice
   print "What's the dog's age? "
@@ -60,10 +60,14 @@ def add_dog(dogs)
   print "What's the dog's image url? "
   image_url = ask_for_choice
 
-  # ✅ Rework the code below to use the Dog class's create method
+  # ✅✅ Rework the code below to use the Dog class's create method
 
-  dog = Dog.new(name, age, breed, image_url)
-  dogs << dog
+  dog = Dog.create(
+    name: name, 
+    age: age,
+    breed: breed,
+    image_url: image_url
+  )
   dog.print
 end
 
@@ -76,13 +80,13 @@ end
 # handle the choice that a user makes by calling the appropriate method or printing an error message if the user types something other than one of our specified options
 def handle_choice(choice)
   if choice == "1"
-    list_dogs($dogs)
+    list_dogs(Dog.all)
   elsif choice == "2"
-    add_dog($dogs)
+    add_dog
   elsif choice == "3"
-    walk_dog($dogs)
+    walk_dog(Dog.needs_walking)
   elsif choice == "4"
-    feed_dog($dogs)
+    feed_dog(Dog.hungry)
   elsif choice == "debug"
     binding.pry
   else

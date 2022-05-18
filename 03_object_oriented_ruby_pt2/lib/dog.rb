@@ -4,27 +4,44 @@ class Dog
 
   # ✅ We want our Dog class to store all of the Dogs we have saved so far
 
-
+  @@all = []
 
   # ✅ We want to be able to access the current state of the stored dogs
 
-
+  def self.all
+    @@all
+  end
 
   # ✅ We want to be able to view all dogs that are hungry
 
-
-
+  # should return all of the dogs who are hungry
+  def self.hungry
+    self.all.filter do |dog|
+      dog.hungry?
+    end
+  end
+  
   # ✅ We want to be able to view all dogs that need a walk
-
+  
+  # should return all of the dogs who need a walk
+  def self.needs_walking
+    self.all.filter do |dog|
+      dog.needs_a_walk?
+    end
+  end
   
 
+  # create should accept the same arguments as .new, invoke new and then save the created instance to @@all
+  def self.create(attributes)
+    self.new(attributes).save
+  end
 
   
   attr_accessor :name, :age, :breed, :image_url, :last_walked_at, :last_fed_at, :favorite_treats
 
   # ✅ We want to be able to create new dog instances by passing a single collection of key-value pairs rather than a series of arguments that need to come in a particular order
   # We want to be able to create new dog instances for testing purposes without necessarily saving them within the collection of stored instances - so we won't be saving all new instances into our stored collection
-  def initialize(name, age, breed, image_url)
+  def initialize(name:, age:, breed:, image_url:)
     @name = name
     @age = age
     @breed = breed
@@ -32,7 +49,10 @@ class Dog
   end
 
   # ✅ We want to be able to save created instances to our stored colletion after we have created them with .new
-
+  def save
+    @@all << self
+    self
+  end
 
 
   # we want to be able to take a dog on a walk and track when they were last walked
@@ -71,7 +91,7 @@ class Dog
   # Call the formatted_name method within print to add the coloring
   def print
     puts
-    puts self.name.green
+    puts self.formatted_name
     puts "  Age: #{self.age}"
     puts "  Breed: #{self.breed}"
     puts "  Image Url: #{self.image_url}"
@@ -88,7 +108,15 @@ class Dog
   # The method should return the name in green if the dog has been fed and walked recently
   # The method should return their name in red along with a message in parentheses if they: need a walk, are hungry, or both
   def formatted_name
-    
+    if self.hungry? && self.needs_a_walk?
+      "#{self.name} (hungry and in need of a walk!)".red
+    elsif self.hungry?
+      "#{self.name} (hungry)".red
+    elsif self.needs_a_walk?
+      "#{self.name} (needs a walk)".red
+    else
+      self.name.green
+    end
   end
   
 end
