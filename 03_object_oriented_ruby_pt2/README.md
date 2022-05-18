@@ -6,8 +6,9 @@
 - Class methods vs Instance methods
 - How to use the `self` keyword and identify what it will refer to
 - Class variables vs Instance variables
+- Private methods
 
-The methods we'll be working on today are related to persisting and retrieving Dogs/Appointments. These are important tasks that we'll continue to do as we introduce new concepts like databases and ActiveRecord later on in the week. The lectures coming up over the next few days will be introducing variations on the same themes. You'll be seeing how the new concepts apply to the applications we've been working on throughout the phase.
+The methods we'll be working on today are related to persisting and retrieving Dogs. These are important tasks that we'll continue to do as we introduce new concepts like databases and ActiveRecord later on in the week. The lectures coming up over the next few days will be introducing variations on the same themes. You'll be seeing how the new concepts apply to the applications we've been working on throughout the phase.
 
 ## Keyword Arguments & Mass Assignment
 
@@ -15,12 +16,12 @@ This is what our initialize method looks like currently:
 
 ```rb
 class Dog
-  attr_accessor :name, :age, :breed, :favorite_treats
-  def initialize(name, age, breed, favorite_treats)
+  attr_accessor :name, :age, :breed, :image_url
+  def initialize(name, age, breed, image_url)
     @name = name
     @age = age
     @breed = breed
-    @favorite_treats = favorite_treats
+    @image_url = image_url
   end
 end
 ```
@@ -28,7 +29,7 @@ end
 And creating a new instance looks like this:
 
 ```rb
-dog = Dog.new("Lennon Snow", "1 year", "Pomeranian", "Apples, carrots, cheese")
+dog = Dog.new("Lennon Snow", "1 year", "Pomeranian", "https://res.cloudinary.com/dnocv6uwb/image/upload/v1609370267/dakota-and-lennon-square-compressed_hoenfo.jpg")
 ```
 
 There are a couple of downsides to this approach. 
@@ -41,12 +42,12 @@ Using keyword arguments instead will solve both of these problems:
 
 ```rb
 class Dog
-  attr_accessor :name, :age, :breed, :favorite_treats
-  def initialize(name:, age:, breed:, favorite_treats:)
+  attr_accessor :name, :age, :breed, :image_url
+  def initialize(name:, age:, breed:, image_url:)
     @name = name
     @age = age
     @breed = breed
-    @favorite_treats = favorite_treats
+    @image_url = image_url
   end
 end
 ```
@@ -60,14 +61,14 @@ Run
 to test this out
 
 ```rb
-Dog.new(name: "Lennon Snow", breed: "Pomeranian", favorite_treats: "Apples, carrots, cheese", age: "1 year")
+Dog.new(name: "Lennon Snow", breed: "Pomeranian", image_url: "https://res.cloudinary.com/dnocv6uwb/image/upload/v1609370267/dakota-and-lennon-square-compressed_hoenfo.jpg", age: "1 year")
 ```
 
 Notice I've switched up the order that the attributes appear within the call to `.new`. This doesn't matter when we're using keyword arguments because the keyword ensures that the attribute values are stored in the appropriate place. When using keyword arguments, all keywords are required by default, so if we try to skip one, we'll get an ArgumentError 
 
 
 ```rb
-Dog.new(name: "Lennon Snow", breed: "Pomeranian", favorite_treats: "Apples, carrots, cheese")
+Dog.new(name: "Lennon Snow", breed: "Pomeranian", image_url: "https://res.cloudinary.com/dnocv6uwb/image/upload/v1609370267/dakota-and-lennon-square-compressed_hoenfo.jpg")
 Traceback (most recent call last):
         6: from /Users/dakotamartinez/.rvm/rubies/ruby-2.6.6/bin/irb:23:in `<main>'
         5: from /Users/dakotamartinez/.rvm/rubies/ruby-2.6.6/bin/irb:23:in `load'
@@ -84,7 +85,7 @@ I'm going to take a brief moment to introduce one of the limitations of keyword 
 
 ```rb
 class Dog 
-  attr_accessor :name, :age, :breed, :favorite_treats
+  attr_accessor :name, :age, :breed, :image_url
   def initialize(attributes = {})
     attributes.each do |attr, value|
       self.send("#{attr}=", value)
@@ -103,7 +104,7 @@ And try the following:
 
 ```rb
 # all will work
-Dog.new(name: "Lennon Snow", breed: "Pomeranian", favorite_treats: "Apples, carrots, cheese", age: "1 year")
+Dog.new(name: "Lennon Snow", breed: "Pomeranian", image_url: "https://res.cloudinary.com/dnocv6uwb/image/upload/v1609370267/dakota-and-lennon-square-compressed_hoenfo.jpg", age: "1 year")
 Dog.new
 Dog.new(name: "Lennon Snow")
 ```
@@ -126,7 +127,7 @@ Here are some examples of class methods we might want:
 - `.create` - makes a new instance and persists it.
 - `.find_by_name(name)` takes a name as an argument and returns the instance that has that name.
 - `.by_breed(breed)` takes a breed as an argument and returns an array of all pets that share that breed.
-- `.needs_feeding` returns an array of all dogs that need feeding.
+- `.hungry` returns an array of all dogs that need feeding.
 - `.needs_walking` returns an array of all dogs that need walking.
 
 ### Class methods vs Instance methods & self
@@ -136,8 +137,8 @@ Here are some examples of class methods we might want:
   - Called **on** the class
   - and `self` refers to the class
 #### Instance methods are:
+  - Defined with**in** the class (but not *ON* it)
   - Called on an **in**stance of the class
-  - defined with**in** the class (but not *ON* it)
   - and `self` refers to the **in**stance
 
 ### examples
@@ -212,14 +213,20 @@ Similarly, we can tell that `say_hi` is an instance method in 2 main ways from l
   - add a `.all` method and `@@all` class variable to keep track of all the dogs
   - add a `#save` method that will save an instance of the dog class to `@@all`
   - add a `.create(attributes)` method that take attributes as an argument and will instantiate and save a new instance of the dog class.
-  - add a `.needs_feeding` method that returns an array of all dogs that need feeding.
+  - add a `.hungry` method that returns an array of all dogs that need feeding.
   - add a `.needs_walking` method that returns an array of all dogs that need walking.
   
 - In CLI
   - Add menu options for viewing all dogs that need feeding and all dogs that need walking.
-  - rework the parts of the cli that were expecting to find all of our dogs in `DOGS` to use the `Dog.all` method instead.
-    - we'll use `Dog.all` instead of `DOGS` to access the array of Dog instances
+  - rework the parts of the cli that were expecting to find all of our dogs in `$dogs` to use the `Dog.all` method instead.
+    - we'll use `Dog.all` instead of `$dogs` to access the array of Dog instances
     - within the `add_dog` method, we'll create an instance of the `Dog` class using the `.create` method
+
+- In dogs_data
+  - We'll remove the call to `.map` at the end of the file so that `$dogs` is an array of hashes containing dog info again.
+
+- In bin/run
+  - We'll use `$dogs` and some of our new methods from `Dog` to create and save dogs from the `lib/dogs_data.rb` file
 
 ### Logistics
 
