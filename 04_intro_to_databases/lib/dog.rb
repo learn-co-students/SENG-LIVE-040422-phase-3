@@ -63,8 +63,8 @@ class Dog
     @birthdate = DateTime.parse(birthdate)
     @breed = breed
     @image_url = image_url
-    @last_walked_at = last_walked_at && DateTime.parse(last_walked_at)
-    @last_fed_at = last_fed_at && DateTime.parse(last_fed_at)
+    @last_walked_at = last_walked_at && DateTime.parse(last_walked_at).change(:offset => "-0700")
+    @last_fed_at = last_fed_at && DateTime.parse(last_fed_at).change(:offset => "-0700")
   end
 
   # The save method will insert a new row in the database for dogs that don't have an id and update the existing row in the database if the dog does have an id.
@@ -98,11 +98,11 @@ class Dog
       DB.execute(
         query,
         self.name,
-        self.birthdate.strftime('%Y-%m-%d %H:%M:%S'),
+        format_time(self.birthdate),
         self.breed,
         self.image_url,
-        self.last_walked_at && self.last_walked_at.strftime('%Y-%m-%d %H:%M:%S'),
-        self.last_fed_at && self.last_fed_at.strftime('%Y-%m-%d %H:%M:%S'),
+        self.last_walked_at && format_time(self.last_walked_at),
+        self.last_fed_at && format_time(self.last_fed_at),
         self.id
       )
     else
@@ -116,11 +116,11 @@ class Dog
       DB.execute(
         query,
         self.name,
-        self.birthdate.strftime('%Y-%m-%d %H:%M:%S'),
+        format_time(self.birthdate),
         self.breed,
         self.image_url,
-        self.last_walked_at && self.last_walked_at.strftime('%Y-%m-%d %H:%M:%S'),
-        self.last_fed_at && self.last_fed_at.strftime('%Y-%m-%d %H:%M:%S')
+        self.last_walked_at && format_time(self.last_walked_at),
+        self.last_fed_at && format_time(self.last_fed_at)
       )
       # Since the dog's id will be assigned by the database
       # we'll need to tell the dog object about the last assigned id
@@ -153,19 +153,19 @@ class Dog
 
   # we want to be able to take a dog on a walk and track when they were last walked
   def walk
-    @last_walked_at = Time.now
+    @last_walked_at = DateTime.now
   end
 
   # we want to be able to feed a dog and track when they were last fed
   def feed
-    @last_fed_at = Time.now
+    @last_fed_at = DateTime.now
   end
 
   # We want to know if a dog needs a walk. 
   # Return true if the dog hasn't been walked (that we know of) or their last walk was longer than a set amount of time in the past, otherwise return false.
   def needs_a_walk?
     if last_walked_at
-      !last_walked_at.between?(10.seconds.ago, Time.now)
+      !last_walked_at.between?(4.hours.ago, DateTime.now)
     else
       true
     end
@@ -175,7 +175,7 @@ class Dog
   # Return true if the dog hasn't been fed (that we know of) or their last feeding was longer than a set amount of time in the past, otherwise return false
   def hungry?
     if last_fed_at
-      !last_fed_at.between?(15.seconds.ago, Time.now)
+      !last_fed_at.between?(6.hours.ago, DateTime.now)
     else
       true
     end
@@ -188,8 +188,8 @@ class Dog
     puts "  Age: #{self.age}"
     puts "  Breed: #{self.breed}"
     puts "  Image Url: #{self.image_url}"
-    puts "  Last walked at: #{self.last_walked_at}"
-    puts "  Last fed at: #{self.last_fed_at}"
+    puts "  Last walked at: #{format_time(self.last_walked_at)}"
+    puts "  Last fed at: #{format_time(self.last_fed_at)}"
     puts
   end
 
@@ -210,6 +210,10 @@ class Dog
     else
       self.name.green
     end
+  end
+
+  def format_time(time)
+    time && time.strftime('%Y-%m-%d %H:%M:%S')
   end
   
 end
