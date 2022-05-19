@@ -27,9 +27,9 @@ Over the last few days we’ve been building out our CLI applications and one of
 Databases allow us to store our data outside of our code and we can do CRUD and have it persist to the next session.
 
 ### ORM Analogy
-![analogy](./analogy.png)
+![analogy](./analogy.drawio.svg)
 
-![Flow](./object-method-sql-query-return.png)
+![Flow](./object-method-sql-query-return.drawio.svg)
 
 At the end of the phase, we'll be building out an API that will sit between our React app and our database:
 
@@ -75,7 +75,7 @@ Open [Google Sheet](https://docs.google.com/spreadsheets/d/1XV8ixdHveb2Z5aOMQknP
 - Again, we'll start our cli application by running the following command in our terminal:
 
 ```bash
-./bin/run
+bundle exec ./bin/run
 ```
 
 
@@ -126,13 +126,13 @@ Open [Google Sheet](https://docs.google.com/spreadsheets/d/1XV8ixdHveb2Z5aOMQknP
 --------------------------------------
 --------------------------------------
 --------------------------------------
-![many to many](./many-to-many.png)
+![many to many](./many-to-many.drawio.svg)
 
 Here's the issue
-![problem](./the-problem.png)
+![problem](./the-problem.drawio.svg)
 
 Here's how we resolve it:
 
-![the-fix](./the-fix.png)
+![the-fix](./the-fix.drawio.svg)
 
 Back to the Sheet
