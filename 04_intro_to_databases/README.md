@@ -15,14 +15,13 @@
 - Part 1 
   - Explanation  database benefits 
   and a bit of a preview of where we’re going with SQL moving forward
-  - Apply what we learned in homework to the Dog Walker CLI app
+  - See how SQL can be integrated into the Dog Walker CLI app
 - Part 2 
   - Hop into Google sheets and start talking about database relationships in the context of different domains
   - practice deciding where to put foreign keys
-- Optional HW: I have an exercise put together for applying the SQL concepts to the appointments domain, but I'm going to prioritize the domain modeling discussion in Google Sheets for now as it's a more valuable conversation to have for your progress as developers and is a better use of our time in lecture. If you'd like additional practice, feel free to give the exercise a try, but know that we'll doing a pivot tomorrow away from writing raw SQL queries.
 
 ## Putting things in Context
-Over the last few days we’ve been building out our CLI applications and one of the problems we’ve had is that we have to create new dogs or appointments every time we start the program.
+Over the last few days we’ve been building out our CLI application and one of the problems we’ve had is that we have to create new dogs every time we start the program.
 
 Databases allow us to store our data outside of our code and we can do CRUD and have it persist to the next session.
 
@@ -66,11 +65,11 @@ Open [Google Sheet](https://docs.google.com/spreadsheets/d/1XV8ixdHveb2Z5aOMQknP
   
 - In CLI
   - no need to change anything for now
-  - Boot it up and try to create a couple of appointments, exit the program, and see if they're still there!
+  - Boot it up and try to walk a dog, restart the program and check that the last_walked_at time is still there!
 
 ### Logistics
 
-- The code for our cli will be written in the file `lib/dog_walker_cli.rb`. 
+- The code for our cli is written in the file `lib/dog_walker_cli.rb`. 
 - Our class methods will be written in `lib/dog.rb` where our `Dog` class is defined.
 - Again, we'll start our cli application by running the following command in our terminal:
 
