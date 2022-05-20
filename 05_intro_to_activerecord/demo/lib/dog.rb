@@ -155,8 +155,7 @@ class Dog
   # the age method calculates a dog's age based on their birthdate
   def age
     return nil if self.birthdate.nil?
-    # binding.pry
-    days_old = (Date.today - self.birthdate).to_i.days
+    days_old = ((Time.now - self.birthdate)/60/60/24).to_i.days
     if days_old < 30.days
       weeks_old = days_old.in_weeks.floor
       "#{weeks_old} #{'week'.pluralize(weeks_old)}"
