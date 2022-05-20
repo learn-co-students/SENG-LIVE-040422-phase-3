@@ -2,6 +2,21 @@ class Dog
   # Class methods will be defined above initialize by convention
   # and instance methods will be defined below initialize
 
+  # ✅ Because we'll be inheriting from ActiveRecord::Base now, some of these methods will be defined in the Base class for us, so we can remove them from the Dog class:
+  # We can remove the following:
+  
+  # --- @@all
+  # --- def self.all
+  # --- def self.new_from_row
+  # --- def self.create
+  # --- all attr_accessors & attr_reader
+  # --- def initialize 
+  # --- def save
+
+  # We'll want to leave our custom methods that work with instances within the CLI, but all of the code related to persistence can be removed as we'll be using the versions of those methods defined in the ActiveRecord::Base class instead.
+
+
+  # Begin ❌❌❌❌❌
   # We'll use the @@all class variable to cache dogs we've retrieved from the database
   # in order to create our caching logic, we'll initialize @@all to nil, that way we can use the ||= operator within self.all to assign it an initial value. 
 
@@ -26,6 +41,7 @@ class Dog
   def self.new_from_row(row)
     self.new(row.transform_keys(&:to_sym))
   end
+  # End ❌❌❌❌❌
 
   # return all of the dogs who are hungry
   def self.hungry
@@ -41,6 +57,7 @@ class Dog
     end
   end
   
+  # Begin ❌❌❌❌❌
 
   # create should accept the same arguments as .new, invoke new and then save the created instance to @@all
   def self.create(attributes)
@@ -132,6 +149,8 @@ class Dog
     end
     self
   end
+
+  # End ❌❌❌❌❌
 
   # the age method calculates a dog's age based on their birthdate
   def age
