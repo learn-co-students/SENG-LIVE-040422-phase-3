@@ -47,7 +47,7 @@
     - name (string)
     - age (string)
     - breed (string)
-    - favorite_treats (string)
+    - image_url (string)
     - last_fed_at (datetime)
     - last_walked_at (datetime)
   - `walks` table
@@ -90,7 +90,7 @@
 ./bin/run
 ```
 
-#### Depdendency/Configuration Updates
+#### Dependency/Configuration Updates
 
 We have a new file, `config/database.yml` that indicates to ActiveRecord that we'll be using a sqlite3 database and gives it a name:
 
@@ -120,7 +120,7 @@ task :console do
 end
 ```
 
-This file descibes all of the rake tasks that will be accessible to me while I work on the project. To see a list of tasks I can use, I can run the following command in my terminal:
+This file describes all of the rake tasks that will be accessible to me while I work on the project. To see a list of tasks I can use, I can run the following command in my terminal:
 
 ```bash
 rake -T
@@ -230,16 +230,26 @@ Walk.destroy_all
 Feeding.destroy_all
 Dog.destroy_all
 
-lennon = Dog.create(name: "Lennon", age: "1 year", breed: "Pomeranian", favorite_treats: "cheese")
-memphis = Dog.create(name: "Memphis", age: "2 years", breed: "Greyhound", favorite_treats: "bacon")
+lennon = Dog.create(
+  name: "Lennon", 
+  age: "1 year", 
+  breed: "Pomeranian", 
+  image_url: "https://res.cloudinary.com/dnocv6uwb/image/upload/v1609370267/dakota-and-lennon-square-compressed_hoenfo.jpg"
+)
+olivia = Dog.create(
+  name: "Olivia",	
+  birthdate: Date.new(2018, 03, 31),
+  breed:	"Terrier",
+  image_url: "https://res.cloudinary.com/dnocv6uwb/image/upload/v1631229064/zx6CPsp_d_utkmww.webp"
+)
 
 lennon.walks.create(time: 4.hours.ago)
 lennon.walks.create(time: 6.hours.ago)
 
 lennon.feedings.create(time: 30.minutes.ago)
 
-memphis.walks.create(time: 15.minutes.ago)
-mephis.feedings.create(time: 2.hours.ago)
+olivia.walks.create(time: 15.minutes.ago)
+olivia.feedings.create(time: 2.hours.ago)
 ```
 
 I've got this code in the `db/seeds.rb` file commented out currently, so we'll want to uncomment it so we can run it and get a couple of dogs in the database as well as some walks and feedings.
