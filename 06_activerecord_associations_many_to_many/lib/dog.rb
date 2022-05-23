@@ -1,25 +1,36 @@
 class Dog < ActiveRecord::Base
-  # ✅ Ensure a many to many relationship between dogs and walks
-  has_many :walks
+  # ✅✅ Ensure a many to many relationship between dogs and walks
+  has_many :dog_walks
+  has_many :walks, through: :dog_walks
   has_many :feedings
 
   # Class methods will be defined above instance methods by convention
 
+  def self.most_walked
+    # group the walk counts by dog_id so we have dog ids as keys and their respective walk count as values
+    walks_by_dog_id = DogWalk.group(:dog_id).count
+    # get the id (as dog_id) of the dog with the most walks and store that walk amount as max_walks_count
+    dog_id, max_walks_count = walks_by_dog_id.max_by{|k,v| v}
+    # iterate over the hash and select only the key value pairs where walk_count is equal to the maximum walks count (for the case where more than one dog has been walked the maximum amount of times)
+    dogs_with_most_walks_ids = walks_by_dog_id.select do |dog_id, walk_count| 
+      walk_count == max_walks_count
+    end.keys
+    # return all dogs where the id matches one of the dogs_with_most_walks_ids collected in the previous step
+    self.where(id: dogs_with_most_walks_ids)
+  end
 
   # ✅ Refactor: Use AR Query methods to return hungry dogs
   # return all of the dogs who are hungry
   def self.hungry
-    self.all.filter do |dog|
-      dog.hungry?
-    end
+    recently_fed_dog_ids = self.joins(:feedings).where(feedings: {time: 6.hours.ago..Time.now}).pluck(:id)
+    self.where.not(id: recently_fed_dog_ids)
   end
   
   # ✅ Refactor: Use AR query methods to return restless dogs
   # return all of the dogs who need a walk
   def self.needs_walking
-    self.all.filter do |dog|
-      dog.needs_a_walk?
-    end
+    recently_walked_dog_ids = self.joins(:walks).where(walks: {time: 4.hours.ago..Time.now}).pluck(:id)
+    self.where.not(id: recently_walked_dog_ids)
   end
   
 
@@ -44,7 +55,7 @@ class Dog < ActiveRecord::Base
   # we want to be able to take a dog on a walk and track when they were last walked
   def walk
     now = DateTime.now
-    self.last_walked_at = now
+    # self.last_walked_at = now
     self.walks.create(time: now)
   end
 
@@ -52,16 +63,21 @@ class Dog < ActiveRecord::Base
   # we want to be able to feed a dog and track when they were last fed
   def feed
     now = DateTime.now
-    self.last_fed_at = now
+    # self.last_fed_at = now
     self.feedings.create(time: now)
   end
 
   # ✅ We'll be removing the last_walked_at and last_fed_at columns, so we'll need to add methods for those.
   
   # ✅ last_walked_at will query the related walks, order them in descending order by time and get the time of the first if it exists
-
+  def last_walked_at
+    self.walks.order(time: :desc).first&.time
+  end
   
   # ✅ last_fed_at will query the related feedings, order them in descending order by time and get the time of the first if it exists
+  def last_fed_at
+    self.feedings.order(time: :desc).first&.time
+  end
 
 
   # We want to know if a dog needs a walk. 
