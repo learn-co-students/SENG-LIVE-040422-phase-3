@@ -130,7 +130,7 @@ end
 
 def list_dogs_who_need_feeding
   puts "Dogs who need feeding:".light_green
-  dogs = Dog.needs_feeding
+  dogs = Dog.hungry
   dogs.each do |dog|
     dog.print
   end
@@ -156,7 +156,7 @@ def list_walks_for_dog
   return if dog == "back"
   puts "Recent walks for #{dog.name}:"
   dog.walks.order(time: :desc).each do |walk|
-    puts "time: #{walk.time.strftime('%A, %m/%d %l:%M %p')}"
+    puts "time: #{walk.formatted_time}"
   end
 end
 
@@ -165,8 +165,8 @@ def list_feedings_for_dog
   dog = prompt_user_to_choose_dog
   return if dog == "back"
   puts "Recent feedings for #{dog.name}:"
-  dog.feedings.order(time: :desc).each do |walk|
-    puts "time: #{walk.time.strftime('%A, %m/%d %l:%M %p')}"
+  dog.feedings.order(time: :desc).each do |feeding|
+    puts "time: #{feeding.formatted_time}"
   end
 end
 
