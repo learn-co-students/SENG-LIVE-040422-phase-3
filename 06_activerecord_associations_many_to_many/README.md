@@ -22,9 +22,9 @@
 - Migrations
   - `dogs` table
     - name (string)
-    - age (string)
+    - birthdate (datetime)
     - breed (string)
-    - favorite_treats (string)
+    - image_url (string)
     - last_fed_at (datetime)
     - last_walked_at (datetime)
   - `walks` table

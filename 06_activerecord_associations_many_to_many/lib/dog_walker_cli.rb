@@ -1,18 +1,10 @@
 PROMPT = TTY::Prompt.new(interrupt: :exit)
 def start_cli
-  puts "hello! Welcome to the Dog Walker CLI"
-  loop do 
-    main_menu
-    handle_user_choice(ask_for_input)
-  end
+  puts "Hi there! Welcome to the Dog Walker CLI!".cyan
 end
 
 def main_menu
   puts "What would you like to do? Type the number that matches your choice or 'exit' to leave the program".cyan
-  print_options
-end
-
-def print_options
   puts "Here's a list of the options. Type:".cyan
   puts "  1. To add a dog".cyan
   puts "  2. To view Dog Info".cyan
@@ -21,9 +13,9 @@ def print_options
   puts "  exit to leave the program".cyan
 end
 
-def handle_user_choice(choice)
+def handle_choice(choice)
   if choice == "1"
-    add_dog.print
+    add_dog
   elsif choice == "2"
     dog_info
   elsif choice == "3"
@@ -37,27 +29,36 @@ def handle_user_choice(choice)
   end
 end
 
+# add_dog should:
+# ask the user for input of the
+# dog's name, birthday, breed and image_url. 
+# Take this information and use it to create a new instance
+# of the dog class (using the method that causes the dog class to save it)
+# print the newly saved dog (by invoking dog.print)
 def add_dog
-  print "What's your dog's name? ".cyan
-  name = ask_for_input
-  print "What's your dog's age? ".cyan
-  age = ask_for_input
-  print "What's your dog's breed? ".cyan
-  breed = ask_for_input
-  print "What are some of your dog's favorite treats? ".cyan
-  favorite_treats = ask_for_input
+  print "What's the dog's name? "
+  name = ask_for_choice
+  print "What's the dog's birthday? (YYYY-MM-DD) "
+  birthdate = ask_for_choice
+  print "What's the dog's breed? "
+  breed = ask_for_choice
+  print "What's the dog's image url? "
+  image_url = ask_for_choice
+
+
   dog = Dog.create(
     name: name, 
-    age: age, 
-    breed: breed, 
-    favorite_treats: favorite_treats
+    birthdate: birthdate,
+    breed: breed,
+    image_url: image_url
   )
+  dog.print
 end
 
 def dog_info
   list_dogs
   print_dog_interaction_choices
-  input = ask_for_input
+  input = ask_for_choice
   until input == "back"
     if input == "1" 
       feed_dog
@@ -75,7 +76,7 @@ def dog_info
       puts "Whoops! I didn't understand your choice".red
     end
     print_dog_interaction_choices
-    input = ask_for_input
+    input = ask_for_choice
   end
 end
 
@@ -96,6 +97,19 @@ def print_dog_interaction_choices
   puts "  6. To view all feedings for a particular dog".cyan
   puts "  back to return to the main menu".cyan
   puts "  exit to leave the program".cyan
+end
+
+# `ask_for_choice` prompts the user for input
+# if the user types "exit" we'll print a message thanking them
+# for using the CLI and invoke exit to terminate the program
+# otherwise, return whatever the user typed in
+def ask_for_choice
+  input = gets.chomp
+  if input == "exit"
+    puts "Thanks for using the Dog Walker CLI!".green
+    exit
+  end
+  input
 end
 
 def feed_dog
@@ -184,13 +198,4 @@ def prompt_user_to_choose_dog
     end
     menu.choice "back"
   end
-end
-
-def ask_for_input
-  input = gets.chomp
-  if input == "exit" 
-    puts "Thank you for using the appointments CLI."
-    exit
-  end
-  input
 end

@@ -3,3 +3,7 @@
 require_relative "../config/environment"
 
 start_cli
+loop do 
+  main_menu
+  handle_choice(choice)
+end
