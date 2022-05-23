@@ -59,8 +59,10 @@ class Dog < ActiveRecord::Base
   # ✅ We'll be removing the last_walked_at and last_fed_at columns, so we'll need to add methods for those.
   
   # ✅ last_walked_at will query the related walks, order them in descending order by time and get the time of the first if it exists
+
   
   # ✅ last_fed_at will query the related feedings, order them in descending order by time and get the time of the first if it exists
+
 
   # We want to know if a dog needs a walk. 
   # Return true if the dog hasn't been walked (that we know of) or their last walk was longer than a set amount of time in the past, otherwise return false.

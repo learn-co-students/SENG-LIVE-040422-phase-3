@@ -1,5 +1,8 @@
 class Walk < ActiveRecord::Base
+  # ✅ Refactor associations so walks and dogs are related in a many to many way
   belongs_to :dog
+
+  # ✅ add a .recent method that returns all walks in the last 4 hours
 
   # takes the time of the walk and formats it as a string like this:
   # Friday, 04/08 4:57 PM
