@@ -1,6 +1,7 @@
 # This will delete any existing rows from the User and Bank tables
 # so you can run the seed file multiple times without having duplicate entries in your database
 puts "Deleting User/Bank data..."
+Account.destroy_all
 User.destroy_all
 Bank.destroy_all
 
@@ -27,7 +28,12 @@ puts "Creating Accounts..."
 # * TODO: create accounts! Remember, an account belongs to a user *
 # * and an account belongs to a bank.                         *
 # ***********************************************************
-
+joe_personal = Account.create(label: "Joe Personal", balance: 1000.0, account_type: "Checking", user_id: joe_shmoe.id, bank_id: bank_of_america.id)
+joe_savings = Account.create(label: "Joe Savings", balance: 4000.0, account_type: "Savings", user_id: joe_shmoe.id, bank_id: bank_of_america.id)
+joe_money_market = Account.create(label: "Joe Savings", balance: 14000.0, account_type: "Money Market", user_id: joe_shmoe.id, bank_id: wells_fargo.id)
+jane_personal = Account.create(label: "Jane Personal", balance: 5000.0, account_type: "Checking", user_id: jane_doe.id, bank_id: jp_morgan_chase.id)
+jane_international = Account.create(label: "Jane overseas", balance: 2000.0, account_type: "Checking", user_id: jane_doe.id, bank_id: royal_bank_of_canada.id)
+# binding.pry
 # Create accounts Here
 
 # ***********************************************************
