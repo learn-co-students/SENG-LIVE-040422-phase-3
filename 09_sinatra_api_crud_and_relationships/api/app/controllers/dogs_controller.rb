@@ -1,7 +1,9 @@
 class DogsController < ApplicationController
   
+  # use includes so that when we serialize associated data we don't end up triggering additional queries for each item in the collection.
+  # using .includes allows us to avoid the N+1 query problem
   get "/dogs" do 
-    serialize(Dog.all)
+    serialize(Dog.includes(:walks))
   end
 
   get "/dogs/:id" do 
@@ -35,9 +37,15 @@ class DogsController < ApplicationController
     params.select {|param,value| allowed_params.include?(param)}
   end
 
+  # add an include option so that dog_walks are included when we request information about dogs. This will ensure that we'll be able to see from our react client the recent walks that our dogs have been on
   def serialize(dog)
     dog.to_json(
-      methods: :age
+      methods: :age,
+      include: {
+        dog_walks: {
+          methods: [:formatted_time]
+        }
+      }
     )
   end
 end
