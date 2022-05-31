@@ -1,19 +1,14 @@
 class DogWalksController < ApplicationController
   post "/dog_walks" do 
-    dog_walk = DogWalk.create(dog_walk_params)
-    dog_walk.to_json(methods: [:formatted_time])
+    
   end
 
   patch "/dog_walks/:id" do
-    dog_walk = DogWalk.find(params[:id])
-    dog_walk.update(dog_walk_params)
-    dog_walk.to_json(methods: [:formatted_time])
+    
   end
 
   delete "/dog_walks/:id" do
-    dog_walk = DogWalk.find(params[:id])
-    dog_walk.destroy
-    dog_walk.to_json(methods: [:formatted_time])
+   
   end
 
   private 

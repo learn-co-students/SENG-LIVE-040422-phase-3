@@ -5,11 +5,11 @@ class WalksController < ApplicationController
   end
  
   post "/walks" do 
-    serialize(Walk.create(walk_params))
+    
   end
 
   delete "/walks/:id" do 
-    serialize(Walk.find(params[:id]).destroy)
+   
   end
 
   private 
